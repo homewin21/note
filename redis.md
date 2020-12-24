@@ -11,6 +11,7 @@
 优点：数据一致性高
 缺点：随着操作的不断增加，aof文件会变得越来越大，数据恢复的速度也会明显下降
 (重写机制:当aof超过设置的大小时，会压缩文件内容。例如:set test 123和set test 1234可以合并为一条)
+
 [参考资料](https://www.cnblogs.com/itdragon/p/7906481.html)
 
 ### 过期键的删除策略
@@ -31,7 +32,9 @@
 特点：属于以上两种策略的折中方案，根据对于时间段的设置和删除键时的持续时间，可以根据实际情况来倾向于保证cpu或内存中的某一方。
 
 	redis使用的过期键值删除策略是：惰性删除加上定期删除，两者配合使用。
+
 [参考资料1](https://blog.csdn.net/ThinkWon/article/details/101522970)
+
 [参考资料2](https://www.cnblogs.com/lukexwang/p/4694094.html)
 
 ### 内存淘汰策略
@@ -51,4 +54,5 @@
 >LFU：Least Frequently Used，最不经常使用。在一段时间内，数据被使用次数最少的，优先被淘汰。
 
 [参考资料1](https://blog.csdn.net/ligupeng7929/article/details/79603060)
+
 [参考资料2](https://blog.csdn.net/zhangchaoyang/article/details/109649331)
