@@ -50,8 +50,8 @@
 * volatile-random：从已设置过期时间的数据集中任意选择数据淘汰。
 * allkeys-lru：从数据集中挑选最近最少使用的数据淘汰
 * allkeys-lfu：从数据集中挑选使用频率最低的数据淘汰。
-* volatile-lfu：从已设置过期时间的数据集挑选使用频率最低的数据淘汰。（redis 5）
-* allkeys-random：从数据集(server.db[i].dict)中任意选择数据淘汰。（redis 5）
+* volatile-lfu：从已设置过期时间的数据集挑选使用频率最低的数据淘汰。（redis 4）
+* allkeys-random：从数据集(server.db[i].dict)中任意选择数据淘汰。（redis 4）
 
 >FIFO：First In First Out，先进先出。判断被存储的时间，离目前最远的数据优先被淘汰。
 
@@ -62,3 +62,15 @@
 [参考资料1](https://blog.csdn.net/ligupeng7929/article/details/79603060)
 
 [参考资料2](https://blog.csdn.net/zhangchaoyang/article/details/109649331)
+
+#### redis中LRU和LFU实现
+
+redis中的LRU采用的是近似LRU来实现以节省内存，每次采取的是抽取某个数量(maxmemory_samples)的键来淘汰其中被使用时间最远的键。
+
+> 根据Redis作者的说法，每个Redis Object可以挤出24 bits的空间，但24 bits是不够存储两个指针的，而存储一个低位时间戳是足够的，Redis Object以秒为单位存储了对象新建或者更新时的unix time，也就是LRU clock，24 bits数据要溢出的话需要194天，而缓存的数据更新非常频繁，已经足够了。而在LFU中，24bits分为16bits和8bits，高16 bits用来记录最近一次计数器降低的时间ldt，单位是分钟，低8 bits记录计数器数值counter。
+
+> Redis3.0之后又改善了算法的性能，会提供一个待淘汰候选key的pool，里面默认有16个key，按照空闲时间排好序。更新时从Redis键空间随机选择N个key，分别计算它们的空闲时间idle，key只会在pool不满或者空闲时间大于pool里最小的时，才会进入pool，然后从pool中选择空闲时间最大的key淘汰掉。
+ 
+[参考资料1](https://www.cnblogs.com/linxiyue/p/10955533.html)
+
+[参考资料2](https://www.cnblogs.com/linxiyue/p/10945216.html)
