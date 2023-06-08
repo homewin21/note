@@ -16,6 +16,10 @@
 		return null;
 	}
 ```
+deduceMainApplicationClass的实现原理比较巧妙，新建了一个运行时异常对象，通过这个对象获取当前的调用函数堆栈数组StackTrace，之后遍历这个堆栈数组，找到方法名为main的类，返回这个类。
+
+SpringBoot将deduceMainApplicationClass方法推断出来的类赋值给了this.mainApplicationClass。通过idea的Find Usages查看属性的使用情况，发现只是在banner打印或者log上有涉及，好像没发现有很大的重要性。
+虽然没有发现this.mainApplicationClass比较重要的使用价值，但是推断这个类的实现方法deduceMainApplicationClass的实现原理还是挺巧妙的，值得学习一下。
 参考:http://qclog.cn/1133
 
 ### 2.异常处理机制FailureAnalyzer
